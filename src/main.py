@@ -1,22 +1,18 @@
-# main.py
-# Entry point for the ML PC Gesture Controller
-# Initializes webcam, detects gestures, and controls PC actions
-
 import cv2
 from gesture_detector import GestureDetector
 from pc_controller import PCController
 
 def main():
-    #initialize webcam
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
         print("Error: Could not open webcam")
         return
-    
-    #initializing gesture detectoe and pc controller
+
     detector = GestureDetector()
     controller = PCController()
-    print("Stating gesture controller. press 'q' to quit.")
+    print("Starting gesture controller. Press 'q' to quit.")
+
+    paused = False  # ✅ NEW: Track paused state
 
     while True:
         ret, frame = cap.read()
@@ -24,22 +20,25 @@ def main():
             print("Error: Could not read frame.")
             break
 
-        #Detect gesture
         gesture = detector.detect(frame)
 
-        #Control Pc based on gesture
-        controller.control(gesture)
+        # ✅ NEW: Toggle pause
+        if gesture == "pause_toggle":
+            paused = not paused
+            state = "PAUSED" if paused else "RESUMED"
+            print(f"[{state}] Gesture control is now {state.lower()}.")
+        
+        # ✅ Only control PC if not paused
+        elif not paused:
+            controller.control(gesture)
 
-        #display the frame
         cv2.imshow("Gesture Controller", frame)
 
-        #Quit on 'q' key
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
-
-    #cleanup
     cap.release()
     cv2.destroyAllWindows()
+
 if __name__ == "__main__":
     main()
