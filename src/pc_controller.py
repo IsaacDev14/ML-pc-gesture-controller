@@ -1,5 +1,3 @@
-
-
 # pc_controller.py
 # Maps gestures to PC actions using PyAutoGUI
 
@@ -7,9 +5,9 @@ import pyautogui
 
 class PCController:
     def __init__(self):
-        #configure Pyautogui
-        pyautogui.FAILSAFE = True #move mouse top-left to stop
-        pyautogui.PAUSE = 0.1 #small dealy between actions
+        # Configure PyAutoGUI
+        pyautogui.FAILSAFE = True  # Move mouse to top-left to stop
+        pyautogui.PAUSE = 0.1  # Small delay between actions
 
     def control(self, gesture):
         """
@@ -18,10 +16,8 @@ class PCController:
         - fist: Decrease volume
         """
         if gesture == "open_palm":
-             pyautogui.press("volumeup")
-             print("volume Up")
-        elif: gesture == "fist":
+            pyautogui.press("volumeup")
+            print("Volume Up")
+        elif gesture == "fist":
             pyautogui.press("volumedown")
             print("Volume Down")
-
-        
